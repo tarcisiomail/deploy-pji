@@ -27,6 +27,8 @@ mydb = psycopg2.connect(
     host="ec2-3-214-136-47.compute-1.amazonaws.com",
     port="5432")
 
+st.set_page_config(page_title='Sala de Leitura', page_icon=None, layout='centered', initial_sidebar_state='expanded', menu_items=None)
+
 def gerar_string_tombo(tombo):
     x = str(tombo)
     y = (x[:-6] + '.' + (x[-6:-3]) + '.' + (x[-3:]))
