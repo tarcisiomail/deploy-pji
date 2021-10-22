@@ -19,7 +19,7 @@ def consultar_banco(sql):
     mycursor = mydb.cursor()
     mycursor.execute(sql)
     x = mycursor.fetchall()
-    mydb.close()
+    mycursor.close()
     return x
 
 
@@ -27,7 +27,7 @@ def alterar_banco(sql, val):
     mycursor = mydb.cursor()
     mycursor.execute(sql, val)
     mydb.commit()
-    mydb.close()
+    mycursor.close()
 
 
 # Função para exibir o formulário de cadastro de livros
@@ -149,9 +149,11 @@ def tela_cadastro_emprestimo():
             """
             mycursor.execute(sql)  # executa a Query
             mydb.commit()  # Adiciona o banco de dados
+            mycursor.close()
             st.spinner("Empréstimo cadastrado com sucesso!")
             time.sleep(3)
             st.success("Empréstimo cadastrado com sucesso")
+            
     # nada()
 
 
@@ -165,6 +167,7 @@ def selecionar_registro(tabela, coluna1, coluna2, coluna3, coluna_exibida, key):
         mycursor.execute(sql)
         resultado = mycursor.fetchall()
         mydb.commit()
+        mycursor.close()
 
         if len(resultado) == 1:
             st.write('Registro selecionado: ', resultado[0][0])
@@ -187,6 +190,7 @@ def selecionar_registro(tabela, coluna1, coluna2, coluna3, coluna_exibida, key):
             resultado = mycursor.fetchall()
             if select_reg != "...":
                 return resultado
+            mycursor.close()
 
         else:
             st.error('Nenhum resultado encontrado!')
@@ -260,4 +264,5 @@ def tela_finalizar_emprestimo():
                         mycursor = mydb.cursor()
                         mycursor.execute(f"DELETE FROM pji.EMPRESTIMO WHERE LIVRO_n_tombo = '{nova_tabela[0][0]}'")
                         mydb.commit()
+                        mycursor.close()
                         st.success("Empréstimo finalizado!")
