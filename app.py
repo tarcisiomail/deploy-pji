@@ -68,6 +68,7 @@ if tela_cadastro == "Livro":
 
 if tela_cadastro == "Aluno":
     tela_cadastro_aluno()
+    st.set_page_config(page_title='Sala de Leitura', page_icon='📘', layout='centered', initial_sidebar_state='auto', menu_items=None)
 if tela_cadastro == "Empréstimo":
     tela_cadastro_emprestimo()
 if tela_cadastro == "Novo Empréstimo":
