@@ -1,6 +1,5 @@
-import mysql.connector
+import psycopg2
 import streamlit as st
-from funcoes.cadastro import SENHA
 
 # Funções feitas
 from funcoes.cadastro import tela_cadastro_livro
@@ -21,13 +20,12 @@ from funcoes.update import tela_cadastro_update_aluno
 from funcoes.update import tela_cadastro_update_livro
 
 # Conexão do Banco de dados
-mydb = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password=SENHA, #alterar a constante SENHA apenas no módulo 'cadastro.py'
-    database="pji"
-)
-
+mydb = psycopg2.connect(
+    database="dcj8rehkg575jt",
+    user="mukyulukhffrky",
+    password="1537728423988d4a4010276828a4e0f56798a783e3e044598e12ce421bd23fe4",
+    host="ec2-3-214-136-47.compute-1.amazonaws.com",
+    port="5432")
 
 def gerar_string_tombo(tombo):
     x = str(tombo)
