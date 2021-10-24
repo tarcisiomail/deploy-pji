@@ -4,8 +4,6 @@ import streamlit as st
 from datetime import datetime, timedelta, date
 import time
 
-SENHA = 'root'  # alterar a senha apenas aqui, entre aspas
-
 # Conexão do Banco de dados
 
 mydb = psycopg2.connect(
@@ -14,7 +12,7 @@ mydb = psycopg2.connect(
     password="1537728423988d4a4010276828a4e0f56798a783e3e044598e12ce421bd23fe4",
     host="ec2-3-214-136-47.compute-1.amazonaws.com",
     port="5432")
-mydb.autocommit = True
+mydb.autocommit = True #opção para evitar que erros em queries impeçam a continuidade do funcionamento do programa
 
 def consultar_banco(sql):
     mycursor = mydb.cursor()
