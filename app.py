@@ -96,7 +96,7 @@ if st.session_state == {}:
 if st.session_state.user == 'none':
     with st.form(key='login'):
         user = st.selectbox("Selecione seu perfil:",('Sala de Leitura', 'Professor'))
-        password = st.text_input("Digite sua senha:")
+        password = st.text_input("Digite sua senha:",type='password')
         login_button = st.form_submit_button("Enviar")
         if login_button:
 
