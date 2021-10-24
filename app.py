@@ -18,9 +18,6 @@ from funcoes.update import upload_alunos
 from funcoes.update import tela_cadastro_update_aluno
 from funcoes.update import tela_cadastro_update_livro
 
-# Conexão do Banco de dados
-
-st.write(st.session_state)
 def sala_de_leitura():
 
     # Parte que chama as Funções do Codigo
