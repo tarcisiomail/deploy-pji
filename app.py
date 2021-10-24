@@ -18,6 +18,8 @@ from funcoes.update import upload_alunos
 from funcoes.update import tela_cadastro_update_aluno
 from funcoes.update import tela_cadastro_update_livro
 
+st.set_page_config(page_title='Sala de Leitura', page_icon='📘', layout='centered', initial_sidebar_state='expanded', menu_items=None)
+
 def sala_de_leitura():
 
     # Parte que chama as Funções do Codigo
@@ -55,7 +57,6 @@ def sala_de_leitura():
         tela_novo_emprestimo()
     if tela_cadastro == "Finalizar Empréstimo":
         tela_finalizar_emprestimo()
-
 
     if tela_cadastro == "Nenhuma ação":
         nada()
