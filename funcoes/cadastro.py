@@ -4,16 +4,17 @@ import streamlit as st
 from datetime import datetime, timedelta, date
 import time
 
-
 SENHA = 'root'  # alterar a senha apenas aqui, entre aspas
 
 # Conexão do Banco de dados
+
 mydb = psycopg2.connect(
     database="dcj8rehkg575jt",
     user="mukyulukhffrky",
     password="1537728423988d4a4010276828a4e0f56798a783e3e044598e12ce421bd23fe4",
     host="ec2-3-214-136-47.compute-1.amazonaws.com",
     port="5432")
+mydb.autocommit = True
 
 def consultar_banco(sql):
     mycursor = mydb.cursor()
@@ -36,10 +37,10 @@ def tela_cadastro_livro():
         st.subheader("CADASTRAR NOVO VOLUME")
 
         # Tombo
-        tombo = st.number_input(label='Tombo',step=1)
+        tombo = st.number_input(label='Tombo', step=1)
 
         # Serial (quantidade de livros iguais)
-        serial = st.number_input(label='Serial',step=0)
+        serial = st.number_input(label='Serial', step=0)
 
         # Título
         titulo = st.text_input(label='Título', max_chars=200)
@@ -69,7 +70,7 @@ def tela_cadastro_livro():
 
 # Função para exibir o formulário de cadastro de alunos
 def tela_cadastro_aluno():
-    with st.form(key='form_aluno',clear_on_submit=True):
+    with st.form(key='form_aluno', clear_on_submit=True):
         st.subheader('CADASTRAR ALUNO(A)')
 
         # Nome
@@ -100,13 +101,14 @@ def tela_cadastro_aluno():
             mydb.commit()
             with st.spinner('Cadastro realizado com sucesso!'):
                 time.sleep(3)
-                st.success('Aluno(a) cadastrado(a): '+nome)
+                st.success('Aluno(a) cadastrado(a): ' + nome)
             mycursor.close()
 
 
 # Função para parar de exibir 'telas'/formulários, limpando a tela
 def nada():
     return None
+
 
 # Função para cadastro de empréstimo, elaborada pelo Rodrigo
 def tela_cadastro_emprestimo():
@@ -149,16 +151,15 @@ def tela_cadastro_emprestimo():
             """
             mycursor.execute(sql)  # executa a Query
             mydb.commit()  # Adiciona o banco de dados
-            mycursor.close()
             st.spinner("Empréstimo cadastrado com sucesso!")
             time.sleep(3)
             st.success("Empréstimo cadastrado com sucesso")
-            
     # nada()
 
 
 def selecionar_registro(tabela, coluna1, coluna2, coluna3, coluna_exibida, key):
     pesquisa = st.text_input(label='', key=key, help='Digite um termo para sua pesquisa:')
+
     if pesquisa != '':
         mycursor = mydb.cursor()
         sql = f'''
@@ -167,12 +168,12 @@ def selecionar_registro(tabela, coluna1, coluna2, coluna3, coluna_exibida, key):
         mycursor.execute(sql)
         resultado = mycursor.fetchall()
         mydb.commit()
-        mycursor.close()
+
 
         if len(resultado) == 1:
             st.write('Registro selecionado: ', resultado[0][0])
-
             return resultado
+
         elif len(resultado) > 1:
             options = list()
             options.append("...")
@@ -180,27 +181,24 @@ def selecionar_registro(tabela, coluna1, coluna2, coluna3, coluna_exibida, key):
                 options.append(resultado[i][coluna_exibida])
 
             select_reg = st.selectbox("", options)
-
-            mycursor = mydb.cursor()
             mycursor.execute(
                 f'''
                 SELECT * FROM "{tabela}" WHERE ({coluna1} LIKE '%{select_reg}%' OR {coluna2} LIKE '%{select_reg}%')
                 ''')
 
             resultado = mycursor.fetchall()
+            mycursor.close()
             if select_reg != "...":
                 return resultado
-            mycursor.close()
 
         else:
             st.error('Nenhum resultado encontrado!')
-
 
 def novo_emprestimo(aluno, livro, data_inicio, data_entrega):
     df_aluno = pd.DataFrame(aluno)
     df_livro = pd.DataFrame(livro)
 
-    mylist = [str(df_aluno[1][0]),str(df_livro[0][0]), str(df_livro[1][0]),
+    mylist = [str(df_aluno[1][0]), str(df_livro[0][0]), str(df_livro[2][0]),
               data_inicio, data_entrega, str(df_aluno[2][0]), str(df_aluno[3][0]),
               str(df_livro[1][0]), str(df_aluno[0][0])]
     alterar_banco('''
@@ -216,12 +214,12 @@ def tela_novo_emprestimo():
     st.warning("Selecione o(a) Aluno(a) pesquisando por nome ou código EOL:")
     aluno = selecionar_registro("ALUNO", 'nome', 'serie', 'turma', 1, 11)
     if aluno is not None:
-        st.write("Aluno(a) selecionado(a):", aluno[0][1], aluno[0][2], aluno[0][3])
+        st.success(st.write("Aluno(a) selecionado(a):", aluno[0][1], aluno[0][2], aluno[0][3]))
     st.write('__________________________________________________________')
     st.warning("Selecione o livro desejado pesquisando por autor, título ou número de tombo:")
-    livro = selecionar_registro("LIVRO", 'autor', 'titulo', 'n_tombo', 1, 10)
+    livro = selecionar_registro("LIVRO", 'autor', 'titulo', 'n_tombo', 2, 10)
     if livro is not None:
-        st.write("Livro selecionado:", livro[0][1], ',', livro[0][2], ',', livro[0][0])
+        st.success(st.write("Livro selecionado:", livro[0][1], ',', livro[0][2], ',', livro[0][0]))
     data_inicio = st.date_input("Selecione a data do início do empréstimo:")
     data_entrega = date.today() + timedelta(7)
     with st.form(key='borrow', clear_on_submit=True):
@@ -231,6 +229,7 @@ def tela_novo_emprestimo():
                 novo_emprestimo(aluno, livro, data_inicio, data_entrega)
             else:
                 st.error("Um erro ocorreu, tente novamente com novos parâmetros.")
+
 
 def tela_finalizar_emprestimo():
     st.subheader("Finalizar empréstimo")
@@ -264,5 +263,4 @@ def tela_finalizar_emprestimo():
                         mycursor = mydb.cursor()
                         mycursor.execute(f"DELETE FROM pji.EMPRESTIMO WHERE LIVRO_n_tombo = '{nova_tabela[0][0]}'")
                         mydb.commit()
-                        mycursor.close()
                         st.success("Empréstimo finalizado!")
