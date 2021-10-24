@@ -18,7 +18,11 @@ from funcoes.update import upload_alunos
 from funcoes.update import tela_cadastro_update_aluno
 from funcoes.update import tela_cadastro_update_livro
 
-st.set_page_config(page_title='Sala de Leitura', page_icon='📘', layout='centered', initial_sidebar_state='expanded', menu_items=None)
+st.set_page_config(page_title='Sala de Leitura',
+                   page_icon='📘',
+                   layout='centered',
+                   initial_sidebar_state='expanded',
+                   menu_items=None)
 
 def sala_de_leitura():
 
@@ -57,7 +61,6 @@ def sala_de_leitura():
         tela_novo_emprestimo()
     if tela_cadastro == "Finalizar Empréstimo":
         tela_finalizar_emprestimo()
-
     if tela_cadastro == "Nenhuma ação":
         nada()
 
@@ -85,18 +88,21 @@ def sala_de_leitura():
     if tela_update == "Alterar livros":
         tela_cadastro_update_livro()
 
+    if (tela_cadastro == 'Nenhuma ação' and tela_consulta == 'Nenhuma ação' and tela_update == 'Nenhuma ação'):
+        st.write("Selecione uma opção no menu lateral esquerdo!")
+
 if st.session_state == {}:
     st.session_state['user'] = 'none'
 if st.session_state.user == 'none':
     with st.form(key='login'):
-        user = st.text_input("Digite seu usuário")
+        user = st.selectbox("Selecione seu perfil:",('Sala de Leitura', 'Professor'))
         password = st.text_input("Digite sua senha:")
         login_button = st.form_submit_button("Enviar")
         if login_button:
 
-            if password == 'nova_senha' and user == 'user':
+            if password == 'nova_senha' and user == 'Sala de Leitura':
                 st.session_state['user'] = 1
             elif password == '':
-                None
+                pass
 if st.session_state.user == 1:
     sala_de_leitura()
