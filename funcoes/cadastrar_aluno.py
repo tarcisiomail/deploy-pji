@@ -18,8 +18,7 @@ def tela_cadastro_aluno():
         nome = st.text_input(label='Nome do(a) Aluno(a):', max_chars=200)
         col1, col2 = st.columns(2)
         with col1:
-            # Série (O preenchimento deste campo está gerando erros)
-            serie = st.text_input('Série:', max_chars=1)
+            serie = st.text_input('Ano:', max_chars=1)
         with col2:
             # Turma (O preenchimento deste campo está gerando erros)
             turma = st.text_input('Turma', max_chars=1)
