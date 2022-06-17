@@ -87,7 +87,7 @@ def selecionar_registro_condicional(tabela, coluna1, ano, turma, key):
         if pesquisa == '' and ano != '...' and turma != '...':
             mycursor = mydb.cursor()
             sql = (f'''
-                SELECT * FROM {tabela} WHERE
+                SELECT * FROM public."{tabela}" WHERE
                 ano = '{ano}' AND
                 turma = '{turma}' ORDER BY nome ASC
             ''')
