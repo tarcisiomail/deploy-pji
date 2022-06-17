@@ -5,8 +5,22 @@ from funcoes.cadastrar_aluno import tela_cadastro_aluno
 from funcoes.consulta import tela_consulta_tabelas
 from funcoes.finalizar_emprestimo import tela_finalizar_emprestimo
 
+st.set_page_config(page_title='Alexandria',
+                   page_icon='📚',
+                   layout='centered',
+                   initial_sidebar_state='expanded',
+                   menu_items=None)
+
 def alexandria():
     st.title("SISTEMA DE GESTÃO DE SALA DE LEITURA ESCOLAR")
+    st.success("INSTRUÇÔES:")
+    st.write("As seguintes opções estão disponíveis no menu à esquerda:")
+    st.write("*Novo Empréstimo")
+    st.write("*Finalizar Empréstimo")
+    st.write("*Cadastrar Livro")
+    st.write("*Cadastrar Aluno")
+    st.write("*Tabelas do Sistema")
+
 
 def novo_emprestimo():
     st.markdown("Novo Empréstimo")
