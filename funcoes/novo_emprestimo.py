@@ -106,7 +106,7 @@ def selecionar_registro_condicional(tabela, coluna1, ano, turma, key):
             mycursor = mydb.cursor()
             if ano != '...' and turma == '...':
                 sql = (f'''
-                    SELECT * FROM {tabela} WHERE 
+                    SELECT * FROM public."{tabela}" WHERE 
                     ano = '{ano}' AND
                     unaccent({coluna1}) ILIKE unaccent('%{pesquisa}%') ORDER BY {coluna1} ASC
                     ''')
@@ -137,7 +137,7 @@ def selecionar_registro_condicional(tabela, coluna1, ano, turma, key):
 
             if ano == '...' and turma != '...':
                 sql = (f'''
-                    SELECT * FROM {tabela} WHERE 
+                    SELECT * FROM public."{tabela}" WHERE 
                     turma = '{turma}' AND
                     unaccent({coluna1}) ILIKE unaccent('%{pesquisa}%') ORDER BY {coluna1} ASC
                     ''')
@@ -169,7 +169,7 @@ def selecionar_registro_condicional(tabela, coluna1, ano, turma, key):
 
             if ano != '...' and turma != '...':
                 sql = (f'''
-                    SELECT * FROM {tabela} WHERE 
+                    SELECT * FROM public."{tabela}" WHERE 
                     (ano = '{ano}' AND turma = '{turma}') AND
                     unaccent({coluna1}) ILIKE unaccent('%{pesquisa}%') ORDER BY {coluna1} ASC
                     ''')
