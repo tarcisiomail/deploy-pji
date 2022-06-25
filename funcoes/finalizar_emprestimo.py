@@ -58,7 +58,7 @@ def tela_finalizar_emprestimo():
         with col1:
             st.empty
         with col2:
-            extraviado = st.selectbox("Extraviado?", ('Não', 'Sim'))
+            extraviado = st.selectbox("Estado de conservação do livro?", ('Bom', 'Regular', 'Ruim', 'Extraviado'))
             finish_button = st.form_submit_button("FINALIZAR EMPRÉSTIMO")
             if finish_button:
                 try:
