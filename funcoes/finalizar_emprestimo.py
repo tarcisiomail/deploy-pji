@@ -19,7 +19,7 @@ def alterar_banco(sql, val):
 
 def tela_finalizar_emprestimo():
     st.subheader("Finalizar empréstimo")
-    st.write("Pesquise os empréstimos vigentes por nome ou ra do aluno, ou título ou tombo do livro:")
+    st.write("Pesquise os empréstimos vigentes por nome do(a) aluno(a), ou título/tombo do livro:")
     mycursor = mydb.cursor()
     mycursor.execute('''
         SELECT public."EMPRESTIMO".livrotombo, public."EMPRESTIMO".livronlivro, 
