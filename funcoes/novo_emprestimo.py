@@ -82,151 +82,187 @@ def selecionar_registro_livro(tabela, coluna1, coluna2, coluna3, key):
 def selecionar_registro_condicional(tabela, coluna1, ano, turma, key):
     col1, col2 = st.columns(2)
     with col1:
-        pesquisa = st.text_input(label='', key=key, help='Digite um termo para sua pesquisa:')
+        pesquisa = st.text_input(label='Filtre pelo nome (opcional):', key=key, help='Digite um termo para sua pesquisa:')
     with col2:
-        if pesquisa == '' and ano != '...' and turma != '...':
-            mycursor = mydb.cursor()
-            sql = (f'''
-                SELECT * FROM public."{tabela}" WHERE
-                ano = '{ano}' AND
-                turma = '{turma}' ORDER BY nome ASC
-            ''')
-            mycursor.execute(sql)
-            resultado = mycursor.fetchall()
-            mydb.commit()
-            mycursor.close()
-            options = ['...']
-            for i in range(len(resultado)):
-                options.append(resultado[i][1])
-            select_reg = st.selectbox("", options)
-            if select_reg != "...":
-                return resultado
-
-        if pesquisa != '':
-            mycursor = mydb.cursor()
-            if ano != '...' and turma == '...':
+        try:
+            if pesquisa == '' and ano == '...' and turma == '...':
+                mycursor = mydb.cursor()
                 sql = (f'''
-                    SELECT * FROM public."{tabela}" WHERE 
+                    SELECT * FROM public."{tabela}" ORDER BY nome ASC
+                ''')
+                mycursor.execute(sql)
+                resultado = mycursor.fetchall()
+                mydb.commit()
+                mycursor.close()
+                options = ['...']
+                for i in range(len(resultado)):
+                    options.append(resultado[i][1])
+                select_reg = st.selectbox("Lista de Alunos:", options)
+                if select_reg != "...":
+                    return resultado
+
+            if ano != '...' and turma == '...' and pesquisa == '':
+                mycursor = mydb.cursor()
+                sql = (f'''
+                    SELECT * FROM public."{tabela}" WHERE
+                    ano = '{ano}' ORDER BY nome ASC
+                ''')
+                mycursor.execute(sql)
+                resultado = mycursor.fetchall()
+                mydb.commit()
+                mycursor.close()
+                options = ['...']
+                for i in range(len(resultado)):
+                    options.append(resultado[i][1])
+                select_reg = st.selectbox("Lista de Alunos:", options)
+                if select_reg != "...":
+                    return resultado
+
+            if pesquisa == '' and ano != '...' and turma != '...':
+                mycursor = mydb.cursor()
+                sql = (f'''
+                    SELECT * FROM public."{tabela}" WHERE
                     ano = '{ano}' AND
-                    unaccent({coluna1}) ILIKE unaccent('%{pesquisa}%') ORDER BY {coluna1} ASC
-                    ''')
+                    turma = '{turma}' ORDER BY nome ASC
+                ''')
                 mycursor.execute(sql)
                 resultado = mycursor.fetchall()
                 mydb.commit()
                 mycursor.close()
-                if len(resultado) == 1:
-                    option = [resultado[0][1]]
-                    st.selectbox('', option)
+                options = ['...']
+                for i in range(len(resultado)):
+                    options.append(resultado[i][1])
+                select_reg = st.selectbox("Lista de Alunos:", options)
+                if select_reg != "...":
                     return resultado
-                elif len(resultado) > 1:
-                    options = list()
-                    options.append("...")
-                    for i in range(len(resultado)):
-                        options.append(resultado[i][1])
-                    select_reg = st.selectbox("", options)
-                    mycursor = mydb.cursor()
-                    mycursor.execute(f'''
-                        SELECT * FROM public."{tabela}" WHERE unaccent({coluna1}) ILIKE unaccent('%{select_reg}%')
+
+            if pesquisa != '':
+                mycursor = mydb.cursor()
+                if ano != '...' and turma == '...':
+                    sql = (f'''
+                        SELECT * FROM public."{tabela}" WHERE 
+                        ano = '{ano}' AND
+                        unaccent({coluna1}) ILIKE unaccent('%{pesquisa}%') ORDER BY {coluna1} ASC
                         ''')
+                    mycursor.execute(sql)
                     resultado = mycursor.fetchall()
+                    mydb.commit()
                     mycursor.close()
-                    if select_reg != "...":
+                    if len(resultado) == 1:
+                        option = [resultado[0][1]]
+                        st.selectbox('Lista de Alunos:', option)
                         return resultado
-                else:
-                    st.error('Nenhum resultado encontrado!')
+                    elif len(resultado) > 1:
+                        options = list()
+                        options.append("...")
+                        for i in range(len(resultado)):
+                            options.append(resultado[i][1])
+                        select_reg = st.selectbox("Lista de Alunos:", options)
+                        mycursor = mydb.cursor()
+                        mycursor.execute(f'''
+                            SELECT * FROM public."{tabela}" WHERE unaccent({coluna1}) ILIKE unaccent('%{select_reg}%')
+                            ''')
+                        resultado = mycursor.fetchall()
+                        mycursor.close()
+                        if select_reg != "...":
+                            return resultado
+                    else:
+                        st.error('Nenhum resultado encontrado!')
 
-            if ano == '...' and turma != '...':
-                sql = (f'''
-                    SELECT * FROM public."{tabela}" WHERE 
-                    turma = '{turma}' AND
-                    unaccent({coluna1}) ILIKE unaccent('%{pesquisa}%') ORDER BY {coluna1} ASC
-                    ''')
-                mycursor.execute(sql)
-                resultado = mycursor.fetchall()
-                mydb.commit()
-                mycursor.close()
-                if len(resultado) == 1:
-                    option = [resultado[0][1]]
-                    st.selectbox('', option)
-                    return resultado
-                elif len(resultado) > 1:
-                    options = list()
-                    options.append("...")
-                    for i in range(len(resultado)):
-                        options.append(resultado[i][1])
-                    select_reg = st.selectbox("", options)
-                    mycursor = mydb.cursor()
-                    mycursor.execute(f'''
-                        SELECT * FROM unaccent({tabela}) 
-                        WHERE unaccent({coluna1})ILIKE unaccent('%{select_reg}%')
+                if ano == '...' and turma != '...':
+                    sql = (f'''
+                        SELECT * FROM public."{tabela}" WHERE 
+                        turma = '{turma}' AND
+                        unaccent({coluna1}) ILIKE unaccent('%{pesquisa}%') ORDER BY {coluna1} ASC
                         ''')
+                    mycursor.execute(sql)
                     resultado = mycursor.fetchall()
+                    mydb.commit()
                     mycursor.close()
-                    if select_reg != "...":
+                    if len(resultado) == 1:
+                        option = [resultado[0][1]]
+                        st.selectbox('Lista de Alunos:', option)
                         return resultado
-                else:
-                    st.error('Nenhum resultado encontrado!')
+                    elif len(resultado) > 1:
+                        options = list()
+                        options.append("...")
+                        for i in range(len(resultado)):
+                            options.append(resultado[i][1])
+                        select_reg = st.selectbox("Lista de Alunos:", options)
+                        mycursor = mydb.cursor()
+                        mycursor.execute(f'''
+                            SELECT * FROM unaccent({tabela}) 
+                            WHERE unaccent({coluna1})ILIKE unaccent('%{select_reg}%')
+                            ''')
+                        resultado = mycursor.fetchall()
+                        mycursor.close()
+                        if select_reg != "...":
+                            return resultado
+                    else:
+                        st.error('Nenhum resultado encontrado!')
 
-            if ano != '...' and turma != '...':
-                sql = (f'''
-                    SELECT * FROM public."{tabela}" WHERE 
-                    (ano = '{ano}' AND turma = '{turma}') AND
-                    unaccent({coluna1}) ILIKE unaccent('%{pesquisa}%') ORDER BY {coluna1} ASC
-                    ''')
-                mycursor.execute(sql)
-                resultado = mycursor.fetchall()
-                mydb.commit()
-                mycursor.close()
-                if len(resultado) == 1:
-                    option = [resultado[0][1]]
-                    st.selectbox('', option)
-                    return resultado
-                elif len(resultado) > 1:
-                    options = list()
-                    options.append("...")
-                    for i in range(len(resultado)):
-                        options.append(resultado[i][1])
-                    select_reg = st.selectbox("", options)
-                    mycursor = mydb.cursor()
-                    mycursor.execute(
-                        f"SELECT * FROM {tabela} WHERE unaccent({coluna1}) ILIKE unaccent('%{select_reg}%')")
+                if ano != '...' and turma != '...':
+                    sql = (f'''
+                        SELECT * FROM public."{tabela}" WHERE 
+                        (ano = '{ano}' AND turma = '{turma}') AND
+                        unaccent({coluna1}) ILIKE unaccent('%{pesquisa}%') ORDER BY {coluna1} ASC
+                        ''')
+                    mycursor.execute(sql)
                     resultado = mycursor.fetchall()
+                    mydb.commit()
                     mycursor.close()
-                    if select_reg != "...":
+                    if len(resultado) == 1:
+                        option = [resultado[0][1]]
+                        st.selectbox('Lista de Alunos:', option)
                         return resultado
-                else:
-                    st.error('Nenhum resultado encontrado!')
+                    elif len(resultado) > 1:
+                        options = list()
+                        options.append("...")
+                        for i in range(len(resultado)):
+                            options.append(resultado[i][1])
+                        select_reg = st.selectbox("Lista de Alunos:", options)
+                        mycursor = mydb.cursor()
+                        mycursor.execute(f'''
+                            SELECT * FROM public."{tabela}" WHERE unaccent({coluna1}) ILIKE unaccent('%{select_reg}%')
+                            ''')
+                        resultado = mycursor.fetchall()
+                        mycursor.close()
+                        if select_reg != "...":
+                            return resultado
+                    else:
+                        st.error('Nenhum resultado encontrado!')
 
-            if ano == '...' and turma == '...':
-                sql = (f'''
-                    SELECT * FROM public."ALUNO" 
-                    WHERE unaccent({coluna1}) ILIKE unaccent('%{pesquisa}%') ORDER BY {coluna1} ASC
-                    ''')
-                mycursor.execute(sql)
-                resultado = mycursor.fetchall()
-                mydb.commit()
-                mycursor.close()
-                if len(resultado) == 1:
-                    option = [resultado[0][1]]
-                    st.selectbox('', option)
-                    return resultado
-                elif len(resultado) > 1:
-                    options = list()
-                    options.append("...")
-                    for i in range(len(resultado)):
-                        options.append(resultado[i][1])
-                    select_reg = st.selectbox("", options)
-                    mycursor = mydb.cursor()
-                    mycursor.execute(f'''
-                        SELECT * FROM public."{tabela}" WHERE unaccent({coluna1}) ILIKE unaccent('%{select_reg}%')
-                    ''')
+                if ano == '...' and turma == '...':
+                    sql = (f'''
+                        SELECT * FROM public."ALUNO" 
+                        WHERE unaccent({coluna1}) ILIKE unaccent('%{pesquisa}%') ORDER BY {coluna1} ASC
+                        ''')
+                    mycursor.execute(sql)
                     resultado = mycursor.fetchall()
+                    mydb.commit()
                     mycursor.close()
-                    if select_reg != "...":
+                    if len(resultado) == 1:
+                        option = [resultado[0][1]]
+                        st.selectbox('', option)
                         return resultado
-                else:
-                    st.error('Nenhum resultado encontrado!')
-
+                    elif len(resultado) > 1:
+                        options = list()
+                        options.append("...")
+                        for i in range(len(resultado)):
+                            options.append(resultado[i][1])
+                        select_reg = st.selectbox("Lista de Alunos:", options)
+                        mycursor = mydb.cursor()
+                        mycursor.execute(f'''
+                            SELECT * FROM public."{tabela}" WHERE unaccent({coluna1}) ILIKE unaccent('%{select_reg}%')
+                        ''')
+                        resultado = mycursor.fetchall()
+                        mycursor.close()
+                        if select_reg != "...":
+                            return resultado
+                    else:
+                        st.error('Nenhum resultado encontrado!')
+        except:
+            st.error("Um erro foi encontrado. Recarregue a página para tentar resolvê-lo.")
 
 def select_column_ano(tabela, coluna, tag, key):
     # Função utilizada para criar um selectbox com registros únicos de uma determinada coluna
@@ -279,13 +315,12 @@ def novo_emprestimo(aluno, livro, data_inicio, data_entrega):
 
 def tela_novo_emprestimo():
     st.subheader("CADASTRAR NOVO EMPRÉSTIMO")
+    st.warning("Selecione o(a) Aluno(a) pesquisando por ano e turma, nome ou selecione diretamente na lista:")
     col1, col2 = st.columns(2)
     with col1:
         ano = select_column_ano('ALUNO', 'ano', 'Selecione o Ano', 113)
     with col2:
         turma = select_column_turma('ALUNO', 'turma', ano, 'Selecione a Turma', 114)
-
-    st.warning("Selecione o(a) Aluno(a) pesquisando pelo nome:")
 
     aluno = selecionar_registro_condicional('ALUNO', 'nome', ano, turma, 11)
     st.write('__________________________________________________________')
