@@ -49,6 +49,7 @@ def tela_consulta_tabelas():
     TABELA_T = mycursor.fetchall()
 
     DATAFRAME = pd.DataFrame(TABELA_T)
+
     try:
         # Colocar nome nas colunas:
         if tabela_escolhida == 'ALUNO':
@@ -59,6 +60,8 @@ def tela_consulta_tabelas():
                 2:'Ano',
                 3:'Turma'
             })
+
+            DATAFRAME.set_index('ID', inplace=True, drop=False)
             st.dataframe(DATAFRAME)
 
         elif tabela_escolhida == 'LIVRO':
@@ -71,24 +74,28 @@ def tela_consulta_tabelas():
                 4:'Edição',
                 5:'Gênero',
                 6:'Prateleira',
-                7:'Extraviado'
+                7:'Estado'
             })
+
+            DATAFRAME.set_index('Número do Tombo', inplace=True, drop=False)
             st.dataframe(DATAFRAME)
 
         elif tabela_escolhida == 'EMPRESTIMO':
             st.subheader("Empréstimos em Andamento")
             DATAFRAME = DATAFRAME.rename(columns={
                 0:'Número do Tombo',
-                1:'Nùmero do Livro',
+                1:'Número do Livro',
                 2:'Nome do(a) Aluno(a)',
                 3:'ID do(a) Aluno(a)',
                 4:'Ano do(a) Aluno(a)',
                 5:'Turma do(a) Aluno(a)',
                 6:'Início do Empréstimo',
-                7:'Extraviado',
+                7:'Estado',
                 8:'Data de Devolução'
             })
-            st.dataframe(DATAFRAME[['Número do Tombo', 'Nùmero do Livro', 'Nome do(a) Aluno(a)', 'ID do(a) Aluno(a)',
+
+            DATAFRAME.set_index('Número do Tombo', inplace=True, drop=False)
+            st.dataframe(DATAFRAME[['Número do Tombo', 'Número do Livro', 'Nome do(a) Aluno(a)', 'ID do(a) Aluno(a)',
                          'Ano do(a) Aluno(a)', 'Turma do(a) Aluno(a)', 'Início do Empréstimo', 'Data de Devolução']])
 
         elif tabela_escolhida == 'HISTORICO_EMPRESTIMO':
@@ -102,15 +109,17 @@ def tela_consulta_tabelas():
                 4:'ID do(a) Aluno(a)',
                 5:'Ano do(a) Aluno(a)',
                 6:'Início do Empréstimo',
-                7:'Livro Extraviado?',
+                7:'Estado',
                 8:'Data da Devolução',
                 9:'Turma do(a) Aluno(a)',
                 10:'Título do Livro'
 
             })
+
+            DATAFRAME.set_index('Número do Tombo', inplace=True, drop=False)
             st.dataframe(DATAFRAME[['Número do Tombo','Nùmero do Livro','Título do Livro','Nome do(a) Aluno(a)',
                                     'Ano do(a) Aluno(a)', 'Turma do(a) Aluno(a)', 'Início do Empréstimo',
-                                    'Livro Extraviado?', 'Data da Devolução']])
+                                    'Estado', 'Data da Devolução']])
     except:
         st.warning("Não há dados para exibir.")
 
