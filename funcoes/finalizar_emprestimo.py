@@ -1,5 +1,6 @@
 import pandas as pd
 import streamlit as st
+import streamlit.components.v1 as components
 import psycopg2
 from datetime import date
 
@@ -87,9 +88,15 @@ def tela_finalizar_emprestimo():
                             livronlivro = '{n_livro}')
                             ''')
                             mydb.commit()
+                            dialogo_sucesso = '''
+                                <script language="javascript">
+                                alert("Empréstimo finalizado com sucesso:");
+                                </script>
+                            '''
+                            components.html(dialogo_sucesso)
                         except:
                             st.write("ERROR2")
                             mydb.rollback()
-                        st.success("Empréstimo finalizado!")
+
                 except:
                     st.error("Nenhum empréstimo selecionado.")
