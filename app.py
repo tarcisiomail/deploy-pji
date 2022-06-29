@@ -1,4 +1,6 @@
 import streamlit as st
+import streamlit.components.v1 as components
+
 from funcoes.novo_emprestimo import tela_novo_emprestimo
 from funcoes.cadastrar_livro import tela_cadastro_livro
 from funcoes.cadastrar_aluno import tela_cadastro_aluno
@@ -11,7 +13,12 @@ st.set_page_config(page_title='Alexandria',
                    initial_sidebar_state='expanded',
                    menu_items=None)
 
-
+dialogo_sucesso ='''
+    <script language="javascript">
+    alert("Cadastro realizado com sucesso!");
+    </script>
+'''
+components.html(dialogo_sucesso)
 
 options = st.sidebar.radio("SELECIONE UMA OPÇÃO: ",("Alexandria - Início",
                                                     "Novo Empréstimo",
