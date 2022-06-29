@@ -1,4 +1,5 @@
 import streamlit as st
+import streamlit.components.v1 as components
 import psycopg2
 
 # Conexão do Banco de dados
@@ -34,4 +35,9 @@ def tela_cadastro_aluno():
             val = (nome, serie, turma)
             mycursor.execute(sql, val)
             mydb.commit()
-            st.success("Aluno(a) cadastrado com sucesso!")
+            dialogo_sucesso = '''
+                <script language="javascript">
+                alert("Aluno(a) cadastrado(a) com sucesso:");
+                </script>
+            '''
+            components.html(dialogo_sucesso)
