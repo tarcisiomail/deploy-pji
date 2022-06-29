@@ -15,7 +15,7 @@ st.set_page_config(page_title='Alexandria',
 
 dialogo_sucesso ='''
     <script language="javascript">
-    alert("Cadastro realizado com sucesso!");
+    alert("Bem-vindo(a) ao Alexandria!");
     </script>
 '''
 components.html(dialogo_sucesso)
