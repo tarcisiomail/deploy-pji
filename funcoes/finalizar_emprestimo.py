@@ -88,9 +88,10 @@ def tela_finalizar_emprestimo():
                             livronlivro = '{n_livro}')
                             ''')
                             mydb.commit()
+                            st.success("Empréstimo finalizado com sucesso!")
                             dialogo_sucesso = '''
                                 <script language="javascript">
-                                alert("Empréstimo finalizado com sucesso:");
+                                alert("Empréstimo finalizado com sucesso!");
                                 </script>
                             '''
                             components.html(dialogo_sucesso)
