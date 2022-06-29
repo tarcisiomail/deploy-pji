@@ -308,6 +308,7 @@ def novo_emprestimo(aluno, livro, data_inicio, data_entrega):
                         (livrotombo, livronlivro, alunonome, alunora, alunoano, alunoturma, datainicio, dataentrega)
                         VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
                       ''', mylist)
+        st.success("Novo empréstimo cadastrado com sucesso!")
         dialogo_sucesso = '''
             <script language="javascript">
             alert("Novo empréstimo cadastrado com sucesso!");
