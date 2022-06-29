@@ -1,5 +1,6 @@
 import pandas as pd
 import streamlit as st
+import streamlit.components.v1 as components
 import psycopg2
 from datetime import timedelta, date
 
@@ -307,7 +308,12 @@ def novo_emprestimo(aluno, livro, data_inicio, data_entrega):
                         (livrotombo, livronlivro, alunonome, alunora, alunoano, alunoturma, datainicio, dataentrega)
                         VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
                       ''', mylist)
-        st.success("Empréstimo cadastrado!")
+        dialogo_sucesso = '''
+            <script language="javascript">
+            alert("Novo empréstimo cadastrado com sucesso!");
+            </script>
+        '''
+        components.html(dialogo_sucesso)
 
     except:
         st.warning("O livro selecionado não está disponível.")
@@ -331,7 +337,8 @@ def tela_novo_emprestimo():
     with st.form(key='borrow', clear_on_submit=True):
         new_borrow = st.form_submit_button(label="CADASTRAR EMPRÉSTIMO")
         if new_borrow:
-            if aluno is not None and livro is not None:
+            try:
                 novo_emprestimo(aluno, livro, data_inicio, data_entrega)
-            else:
+            except:
                 st.error("Um erro ocorreu, tente novamente com novos parâmetros.")
+                mydb.rollback()
