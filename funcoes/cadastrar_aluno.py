@@ -32,7 +32,7 @@ def tela_cadastro_aluno():
             INSERT INTO "ALUNO" (nome, ano, turma) 
             VALUES (%s, %s, %s)
             """
-            val = (nome, serie, turma)
+            val = (nome, serie, turma.upper())
             mycursor.execute(sql, val)
             mydb.commit()
             st.success("Aluno(a) cadastrado(a) com sucesso!")
