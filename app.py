@@ -18,7 +18,7 @@ dialogo_sucesso ='''
     alert("Bem-vindo(a) ao Alexandria!");
     </script>
 '''
-components.html(dialogo_sucesso)
+components.html(dialogo_sucesso, height=0)
 
 options = st.sidebar.radio("SELECIONE UMA OPÇÃO: ",("Alexandria - Início",
                                                     "Novo Empréstimo",

@@ -314,7 +314,7 @@ def novo_emprestimo(aluno, livro, data_inicio, data_entrega):
             alert("Novo empréstimo cadastrado com sucesso!");
             </script>
         '''
-        components.html(dialogo_sucesso)
+        components.html(dialogo_sucesso, height=0)
 
     except:
         st.warning("O livro selecionado não está disponível.")

@@ -41,4 +41,4 @@ def tela_cadastro_aluno():
                 alert("Aluno(a) cadastrado(a) com sucesso!");
                 </script>
             '''
-            components.html(dialogo_sucesso)
+            components.html(dialogo_sucesso, height=0)

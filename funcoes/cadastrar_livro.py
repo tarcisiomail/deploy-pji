@@ -170,7 +170,7 @@ def tela_cadastro_livro():
                         alert("Novo volume cadastrado com sucesso!");
                         </script>
                     '''
-                    components.html(dialogo_sucesso)
+                    components.html(dialogo_sucesso, height=0)
 
         try:
             if st.session_state.confirma == 1:

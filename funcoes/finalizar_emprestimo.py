@@ -94,7 +94,7 @@ def tela_finalizar_emprestimo():
                                 alert("Empréstimo finalizado com sucesso!");
                                 </script>
                             '''
-                            components.html(dialogo_sucesso)
+                            components.html(dialogo_sucesso, height=0)
                         except:
                             st.write("ERROR2")
                             mydb.rollback()
