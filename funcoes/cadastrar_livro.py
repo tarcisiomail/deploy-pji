@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import streamlit as st
+import streamlit.components.v1 as components
 import psycopg2
 
 # Conexão do Banco de dados
@@ -163,8 +164,14 @@ def tela_cadastro_livro():
                     val = (tombo, n_livro, titulo, autor, editora, edicao, genero, prateleira)
                     mycursor.execute(sql, val)
                     mydb.commit()
-
                     st.success("Novo volume cadastrado com sucesso! Número do Tombo: "+str(tombo)+'-'+str(n_livro))
+                    dialogo_sucesso = '''
+                        <script language="javascript">
+                        alert("Novo volume cadastrado com sucesso!");
+                        </script>
+                    '''
+                    components.html(dialogo_sucesso)
+
         try:
             if st.session_state.confirma == 1:
 
@@ -182,13 +189,19 @@ def tela_cadastro_livro():
                         val = (tombo, n_livro, titulo, autor, editora, edicao, genero)
                         mycursor.execute(sql, val)
                         mydb.commit()
-
+                        dialogo_sucesso = '''
+                            <script language="javascript">
+                            alert("Novo volume cadastrado com sucesso!");
+                            </script>
+                        '''
+                        components.html(dialogo_sucesso)
                         st.success(
                             "Novo volume cadastrado com sucesso! Número do Tombo: " + str(tombo) + '-' + str(n_livro))
 
                         st.session_state.confirma = 0
         except:
-            pass
+            mydb.rollback()
+
     if selecionar_livro is not None:
         st.write('Última prateleira: '+str(selecionar_livro[len(selecionar_livro)-1][7]))
         with st.form(key='repetir livro'):
@@ -250,6 +263,12 @@ def tela_cadastro_livro():
                 })
                 st.dataframe(dframe)
                 st.success('Novo volume cadastrado com sucesso!')
+                dialogo_sucesso = '''
+                    <script language="javascript">
+                    alert("Novo volume cadastrado com sucesso!");
+                    </script>
+                '''
+                components.html(dialogo_sucesso)
 
 def selecionar_registro_titulo(tabela, coluna1, coluna2, coluna3, coluna_exibida, key):
     pesquisa = st.text_input(label='', key=key, help='Digite um termo para sua pesquisa:')
@@ -266,7 +285,6 @@ def selecionar_registro_titulo(tabela, coluna1, coluna2, coluna3, coluna_exibida
         mycursor.execute(sql)
         resultado = mycursor.fetchall()
         mydb.commit()
-
 
         if len(resultado) >= 1:
 
