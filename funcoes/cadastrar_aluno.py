@@ -35,9 +35,10 @@ def tela_cadastro_aluno():
             val = (nome, serie, turma)
             mycursor.execute(sql, val)
             mydb.commit()
+            st.success("Aluno(a) cadastrado(a) com sucesso!")
             dialogo_sucesso = '''
                 <script language="javascript">
-                alert("Aluno(a) cadastrado(a) com sucesso:");
+                alert("Aluno(a) cadastrado(a) com sucesso!");
                 </script>
             '''
             components.html(dialogo_sucesso)
