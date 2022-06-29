@@ -30,7 +30,7 @@ def selecionar_registro_livro(tabela, coluna1, coluna2, coluna3, key):
             FROM public."{tabela}" 
             WHERE (unaccent({coluna1}) ILIKE unaccent('%{pesquisa}%') 
             OR unaccent({coluna2}) ILIKE unaccent('%{pesquisa}%') 
-            OR unaccent({coluna3}) ILIKE unaccent('%{pesquisa}%'))
+            OR unaccent({coluna3}) ILIKE unaccent('%{pesquisa}%')) ORDER BY titulo ASC
             """)
         mycursor.execute(sql)
         resultado = mycursor.fetchall()
